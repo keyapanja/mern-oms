@@ -9,7 +9,7 @@ const cors = require("cors");
 connectDB();
 
 var corsOptions = {
-    origin: "https://managedesk.netlify.app/"
+    origin: "*"
 };
 
 app.use((_, res, next) => {
