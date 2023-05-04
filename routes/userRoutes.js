@@ -36,7 +36,7 @@ router.get('/test-mail', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    User.findOne({ username: req.body.username })
+    User.findOne({ $or: [{ username: req.body.username }, { email: req.body.username }] })
         .then((data) => {
             if (data && data.userType === 'staff') {
                 Staff.findOne({ staffID: data.staffID })
@@ -92,7 +92,7 @@ router.post('/login', (req, res) => {
         .catch((err) => {
             res.json({
                 'status': 'error',
-                'message': err.message
+                'msg': err.message
             })
         })
 })
@@ -121,9 +121,9 @@ router.post('/create-account', (req, res) => {
                 User.create(req.body)
                     .then((data) => {
                         var mailOptions = {
-                            from: 'keya31002@gmail.com',
+                            from: 'testmailinfo9@gmail.com',
                             to: req.body.email,
-                            subject: `new Staff Account Created!`,
+                            subject: `New Staff Account Created!`,
                             html: `Hello! <br><br> 
                             Welcome to the Webdomnet family! Your staff account has been created successfully! 
                             <br> Here are your login credentials:
@@ -172,6 +172,97 @@ router.get('/logged-user-data/:username', (req, res) => {
                 .catch((err) => res.json(err));
         })
         .catch((err) => res.json(err));
+})
+
+router.post('/check-user', (req, res) => {
+    User.findOne({ email: req.body.email })
+        .then((data) => {
+            if (data) {
+                var mailOptions = {
+                    from: 'testmailinfo9@gmail.com',
+                    to: req.body.email,
+                    subject: `Reset your password!`,
+                    html: `Hello! <br><br> 
+                    We've got your request to reset your password! Here's the link to reset your password. This link is valid for <b>30 Minutes Only</b>.
+                    <br> Please click the link below:
+                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + btoa(new Date())}
+                    <br><br>
+                    You can access your account from the following link:
+                    <br>${process.env.FRONTEND}`
+                };
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        res.json({
+                            "status": "error",
+                            "msg": error
+                        })
+                    } else {
+                        res.json({
+                            "status": "success",
+                            "msg": "The password reset link has been sent to your email!",
+                        })
+                    }
+                });
+            } else {
+                res.json({
+                    'status': 'error',
+                    'msg': 'Email not found!'
+                })
+            }
+        })
+        .catch((err) => {
+            res.json({
+                'status': 'error',
+                'msg': err.message
+            })
+        });
+})
+
+router.post('/change-password', (req, res) => {
+    User.findOneAndUpdate(
+        { email: req.body.email },
+        { password: req.body.password }
+    )
+        .then((data) => {
+            if (data) {
+                var mailOptions = {
+                    from: 'testmailinfo9@gmail.com',
+                    to: req.body.email,
+                    subject: `Password changed!`,
+                    html: `Hello! <br><br> 
+                   This is to inform you that your account password for Office Management System has been changed successfully.
+                    <br><br>
+                    You can access your account from the following link:
+                    <br>${process.env.FRONTEND}`
+                };
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        res.json({
+                            "status": "error",
+                            "msg": error
+                        })
+                    } else {
+                        res.json({
+                            "status": "success",
+                            "msg": "Password changed successfully!",
+                        })
+                    }
+                });
+            } else {
+                res.json({
+                    "status": "error",
+                    "msg": 'Something went wrong..!'
+                })
+            }
+        })
+        .catch((err) => {
+            res.json({
+                'status': 'error',
+                'msg': err.message
+            })
+        })
 })
 
 module.exports = router;
