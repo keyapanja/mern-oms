@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const CryptoJS = require("crypto-js");
 
 const User = require('../models/userModel');
 const Staff = require('../models/staffModel');
+
+const secretPass = 'my-secret-code';
 
 //Nodemailer for sending email
 var nodemailer = require('nodemailer');
@@ -42,7 +45,7 @@ router.post('/login', (req, res) => {
                 Staff.findOne({ staffID: data.staffID })
                     .then((staffData) => {
                         if (staffData.status === 'active') {
-                            if (data.password === req.body.password || data.password === btoa(req.body.password)) {
+                            if (data.password === req.body.password || data.password === CryptoJS.AES.decrypt(req.body.password, secretPass)) {
                                 res.json({
                                     'status': 'success',
                                     'msg': 'Successfully logged in!',
@@ -66,7 +69,7 @@ router.post('/login', (req, res) => {
                         }
                     })
             } else if (data && data.userType === 'admin') {
-                if (data.password === req.body.password || data.password === btoa(req.body.password)) {
+                if (data.password === req.body.password || data.password === CryptoJS.AES.decrypt(req.body.password, secretPass)) {
                     res.json({
                         'status': 'success',
                         'msg': 'Successfully logged in!',
@@ -185,7 +188,7 @@ router.post('/check-user', (req, res) => {
                     html: `Hello! <br><br> 
                     We've got your request to reset your password! Here's the link to reset your password. This link is valid for <b>30 Minutes Only</b>.
                     <br> Please click the link below:
-                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + btoa(new Date())}
+                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + CryptoJS.AES.encrypt(new Date())}
                     <br><br>
                     You can access your account from the following link:
                     <br>${process.env.FRONTEND}`
