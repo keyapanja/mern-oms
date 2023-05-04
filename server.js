@@ -8,9 +8,9 @@ const cors = require("cors");
 
 connectDB();
 
-// var corsOptions = {
-//     origin: "http://localhost:3000"
-// };
+var corsOptions = {
+    origin: "https://managedesk.netlify.app/"
+};
 
 app.use((_, res, next) => {
     res.set('Access-Control-Allow-Origin', '*'); // or 'localhost:8888'
@@ -22,7 +22,7 @@ app.use((_, res, next) => {
     return next();
 }); // sets headers before routes
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
