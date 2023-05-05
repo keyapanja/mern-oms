@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require('../models/userModel');
 const Staff = require('../models/staffModel');
 
+const { Buffer } = require("node:buffer");
+
 //Nodemailer for sending email
 var nodemailer = require('nodemailer');
 
@@ -42,7 +44,7 @@ router.post('/login', (req, res) => {
                 Staff.findOne({ staffID: data.staffID })
                     .then((staffData) => {
                         if (staffData.status === 'active') {
-                            if (data.password === req.body.password || data.password === atob(req.body.password)) {
+                            if (data.password === req.body.password || data.password === Buffer.from(req.body.password, 'base64').toString('utf8')) {
                                 res.json({
                                     'status': 'success',
                                     'msg': 'Successfully logged in!',
@@ -66,7 +68,7 @@ router.post('/login', (req, res) => {
                         }
                     })
             } else if (data && data.userType === 'admin') {
-                if (data.password === req.body.password || data.password === atob(req.body.password)) {
+                if (data.password === req.body.password || data.password === Buffer.from(req.body.password, 'base64').toString('utf8')) {
                     res.json({
                         'status': 'success',
                         'msg': 'Successfully logged in!',
@@ -128,7 +130,7 @@ router.post('/create-account', (req, res) => {
                             Welcome to the Webdomnet family! Your staff account has been created successfully! 
                             <br> Here are your login credentials:
                             <br>Username: ${data.username}
-                            <br>Password: [--set by you--]
+                            <br>Password: ${Buffer.from(data.password, 'base64').toString('utf8')}
                             <br>You can reset your password at any time from here: ${process.env.FRONTEND + '/forgot-password'}
                             <br><br>
                             You can access your account from the following link:
@@ -190,7 +192,7 @@ router.post('/check-user', (req, res) => {
                     html: `Hello! <br><br> 
                     We've got your request to reset your password! Here's the link to reset your password. This link is valid for <b>30 Minutes Only</b>.
                     <br> Please click the link below:
-                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + encodeURI(new Date())}
+                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + Buffer.from(new Date()).toString('base64')}
                     <br><br>
                     You can access your account from the following link:
                     <br>${process.env.FRONTEND}`
