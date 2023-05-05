@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require('../models/userModel');
 const Staff = require('../models/staffModel');
 
+const btoa = require('btoa');
+
 //Nodemailer for sending email
 var nodemailer = require('nodemailer');
 
@@ -42,7 +44,7 @@ router.post('/login', (req, res) => {
                 Staff.findOne({ staffID: data.staffID })
                     .then((staffData) => {
                         if (staffData.status === 'active') {
-                            if (data.password === req.body.password || atob(data.password) === req.body.password) {
+                            if (data.password === req.body.password || data.password === btoa(req.body.password)) {
                                 res.json({
                                     'status': 'success',
                                     'msg': 'Successfully logged in!',
@@ -66,7 +68,8 @@ router.post('/login', (req, res) => {
                         }
                     })
             } else if (data && data.userType === 'admin') {
-                if (data.password === req.body.password || atob(data.password) === req.body.password) {
+                console.log(data.password);
+                if (data.password === req.body.password || data.password === btoa(req.body.password)) {
                     res.json({
                         'status': 'success',
                         'msg': 'Successfully logged in!',
@@ -128,7 +131,7 @@ router.post('/create-account', (req, res) => {
                             Welcome to the Webdomnet family! Your staff account has been created successfully! 
                             <br> Here are your login credentials:
                             <br>Username: ${data.username}
-                            <br>Password: ${atob(data.password)}
+                            <br>Password: ${data.password}
                             <br><br>
                             You can access your account from the following link:
                             <br>${process.env.FRONTEND}`
