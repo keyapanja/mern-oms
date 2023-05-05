@@ -66,7 +66,6 @@ router.post('/login', (req, res) => {
                         }
                     })
             } else if (data && data.userType === 'admin') {
-                console.log(data.password);
                 if (data.password === req.body.password) {
                     res.json({
                         'status': 'success',

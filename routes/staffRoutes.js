@@ -223,4 +223,22 @@ router.post('/change-pfp/:staffID', (req, res) => {
         })
 })
 
+router.post('/add-permissions/:staffID', (req, res) => {
+    Staff.findOneAndUpdate({ staffID: req.params.staffID }, {
+        permissions: req.params.permissions
+    })
+        .then((data) => {
+            if (data) {
+                res.json({
+                    'status': 'success',
+                    'msg': 'Permissions are added successfully!'
+                })
+            }
+        })
+        .catch((err) => res.json({
+            'status': 'error',
+            'msg': err.message
+        }))
+})
+
 module.exports = router;

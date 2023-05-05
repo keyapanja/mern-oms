@@ -28,7 +28,8 @@ const staffModel = mongoose.Schema(
             required: true
         },
         address: {
-            type: String
+            type: String,
+            default: '-'
         },
         mobile: {
             type: String,
@@ -69,7 +70,8 @@ const staffModel = mongoose.Schema(
             type: String
         },
         skills: {
-            type: String
+            type: String,
+            default: '-'
         },
         ExpLevel: {
             type: String,
@@ -81,7 +83,10 @@ const staffModel = mongoose.Schema(
         status: {
             type: String,
             default: 'active'
-        }
+        },
+        permissions: [{
+            type: String,
+        }]
     },
     {
         timestamps: true
