@@ -4,8 +4,6 @@ const router = express.Router();
 const User = require('../models/userModel');
 const Staff = require('../models/staffModel');
 
-const btoa = require('btoa');
-
 //Nodemailer for sending email
 var nodemailer = require('nodemailer');
 
@@ -44,7 +42,7 @@ router.post('/login', (req, res) => {
                 Staff.findOne({ staffID: data.staffID })
                     .then((staffData) => {
                         if (staffData.status === 'active') {
-                            if (data.password === req.body.password || data.password === btoa(req.body.password)) {
+                            if (data.password === req.body.password) {
                                 res.json({
                                     'status': 'success',
                                     'msg': 'Successfully logged in!',
@@ -69,7 +67,7 @@ router.post('/login', (req, res) => {
                     })
             } else if (data && data.userType === 'admin') {
                 console.log(data.password);
-                if (data.password === req.body.password || data.password === btoa(req.body.password)) {
+                if (data.password === req.body.password) {
                     res.json({
                         'status': 'success',
                         'msg': 'Successfully logged in!',
