@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Staff = require('../models/staffModel');
-const User = require('../models/userModel');
+const User = require("../models/userModel");
 
 //Nodemailer for sending email
 var nodemailer = require('nodemailer');
@@ -175,7 +175,6 @@ router.post('/change-status/:id', (req, res) => {
 
 // Import multer like the other dependencies
 const multer = require('multer');
-const User = require("../models/userModel");
 
 router.post('/change-pfp/:staffID', (req, res) => {
 
