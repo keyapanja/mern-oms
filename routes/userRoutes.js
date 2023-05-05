@@ -129,7 +129,8 @@ router.post('/create-account', (req, res) => {
                             Welcome to the Webdomnet family! Your staff account has been created successfully! 
                             <br> Here are your login credentials:
                             <br>Username: ${data.username}
-                            <br>Password: ${atob(data.password)}
+                            <br>Password: [--set by you--]
+                            <br>You can reset your password at any time from here: ${process.env.FRONTEND + '/forgot-password'}
                             <br><br>
                             You can access your account from the following link:
                             <br>${process.env.FRONTEND}`
