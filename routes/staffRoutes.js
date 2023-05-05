@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Staff = require('../models/staffModel');
+const User = require('../models/userModel');
 
 //Nodemailer for sending email
 var nodemailer = require('nodemailer');
