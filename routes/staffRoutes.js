@@ -55,11 +55,6 @@ router.post('/add', (req, res) => {
                         })
                     }
                 });
-
-                // res.json({
-                //     'status': 'success',
-                //     'msg': 'Employee added successfully!'
-                // })
             }
         })
         .catch((err) => res.json({
@@ -72,11 +67,17 @@ router.post('/delete/:id', (req, res) => {
     Staff.findOneAndDelete({ _id: req.params.id })
         .then((data) => {
             if (data) {
-                User.findOneAndDelete({ staffID: data.staffID });
-                res.json({
-                    'status': 'success',
-                    'msg': 'Staff deleted successfully!'
-                })
+                User.findOneAndDelete({ staffID: data.staffID })
+                    .then((newdata) => {
+                        res.json({
+                            'status': 'success',
+                            'msg': 'Staff deleted successfully!'
+                        })
+                    })
+                    .catch((err) => res.json({
+                        'status': 'error',
+                        'msg': err.message
+                    }))
             }
         })
         .catch((err) => res.json({
