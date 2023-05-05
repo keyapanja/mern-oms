@@ -72,6 +72,7 @@ router.post('/delete/:id', (req, res) => {
     Staff.findOneAndDelete({ _id: req.params.id })
         .then((data) => {
             if (data) {
+                User.findOneAndDelete({ staffID: data.staffID });
                 res.json({
                     'status': 'success',
                     'msg': 'Staff deleted successfully!'
@@ -171,7 +172,8 @@ router.post('/change-status/:id', (req, res) => {
 })
 
 // Import multer like the other dependencies
-const multer = require('multer')
+const multer = require('multer');
+const User = require("../models/userModel");
 
 router.post('/change-pfp/:staffID', (req, res) => {
 

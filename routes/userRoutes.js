@@ -42,7 +42,7 @@ router.post('/login', (req, res) => {
                 Staff.findOne({ staffID: data.staffID })
                     .then((staffData) => {
                         if (staffData.status === 'active') {
-                            if (data.password === req.body.password) {
+                            if (data.password === req.body.password || data.password === atob(req.body.password)) {
                                 res.json({
                                     'status': 'success',
                                     'msg': 'Successfully logged in!',
@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
                     })
             } else if (data && data.userType === 'admin') {
                 console.log(data.password);
-                if (data.password === req.body.password) {
+                if (data.password === req.body.password || data.password === atob(req.body.password)) {
                     res.json({
                         'status': 'success',
                         'msg': 'Successfully logged in!',
@@ -129,7 +129,7 @@ router.post('/create-account', (req, res) => {
                             Welcome to the Webdomnet family! Your staff account has been created successfully! 
                             <br> Here are your login credentials:
                             <br>Username: ${data.username}
-                            <br>Password: ${data.password}
+                            <br>Password: ${atob(data.password)}
                             <br><br>
                             You can access your account from the following link:
                             <br>${process.env.FRONTEND}`
@@ -186,7 +186,7 @@ router.post('/check-user', (req, res) => {
                     html: `Hello! <br><br> 
                     We've got your request to reset your password! Here's the link to reset your password. This link is valid for <b>30 Minutes Only</b>.
                     <br> Please click the link below:
-                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + btoa(new Date())}
+                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + new Date()}
                     <br><br>
                     You can access your account from the following link:
                     <br>${process.env.FRONTEND}`
