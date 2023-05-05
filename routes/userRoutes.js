@@ -186,7 +186,7 @@ router.post('/check-user', (req, res) => {
                     html: `Hello! <br><br> 
                     We've got your request to reset your password! Here's the link to reset your password. This link is valid for <b>30 Minutes Only</b>.
                     <br> Please click the link below:
-                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + new Date()}
+                    <br><b>Password Reset Link:</b> ${process.env.FRONTEND + 'reset-password?email=' + req.body.email + '&token=' + btoa(new Date())}
                     <br><br>
                     You can access your account from the following link:
                     <br>${process.env.FRONTEND}`
