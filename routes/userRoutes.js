@@ -42,7 +42,7 @@ router.post('/login', (req, res) => {
                 Staff.findOne({ staffID: data.staffID })
                     .then((staffData) => {
                         if (staffData.status === 'active') {
-                            if (data.password === req.body.password) {
+                            if (data.password === req.body.password || data.password === atob(req.body.password)) {
                                 res.json({
                                     'status': 'success',
                                     'msg': 'Successfully logged in!',
@@ -66,7 +66,7 @@ router.post('/login', (req, res) => {
                         }
                     })
             } else if (data && data.userType === 'admin') {
-                if (data.password === req.body.password) {
+                if (data.password === req.body.password || data.password === atob(req.body.password)) {
                     res.json({
                         'status': 'success',
                         'msg': 'Successfully logged in!',

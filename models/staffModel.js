@@ -85,8 +85,9 @@ const staffModel = mongoose.Schema(
             default: 'active'
         },
         permissions: [{
-            type: String,
-        }]
+            type: Object,
+            default: ''
+        }],
     },
     {
         timestamps: true

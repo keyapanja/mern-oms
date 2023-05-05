@@ -225,14 +225,31 @@ router.post('/change-pfp/:staffID', (req, res) => {
 
 router.post('/add-permissions/:staffID', (req, res) => {
     Staff.findOneAndUpdate({ staffID: req.params.staffID }, {
-        permissions: req.params.permissions
+        $set: {
+            permissions: []
+        }
     })
         .then((data) => {
             if (data) {
-                res.json({
-                    'status': 'success',
-                    'msg': 'Permissions are added successfully!'
+                Staff.findOneAndUpdate({ staffID: req.params.staffID }, {
+                    $push: {
+                        permissions: {
+                            $each: req.body.permissions
+                        }
+                    }
                 })
+                    .then((final) => {
+                        if (final) {
+                            res.json({
+                                'status': 'success',
+                                'msg': 'Permissions are added successfully!'
+                            })
+                        }
+                    })
+                    .catch((err) => res.json({
+                        'status': 'error',
+                        'msg': err.message
+                    }))
             }
         })
         .catch((err) => res.json({
