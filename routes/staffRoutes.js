@@ -94,6 +94,7 @@ router.post('/edit/:id', (req, res) => {
         'gender': req.body.gender,
         'dob': req.body.dob,
         'qualification': req.body.qualification,
+        'course': req.body.course,
         'address': req.body.address,
         'mobile': req.body.mobile,
         'email': req.body.email,

@@ -27,6 +27,9 @@ const staffModel = mongoose.Schema(
             type: String,
             required: true
         },
+        course: {
+            type: String,
+        },
         address: {
             type: String,
             default: '-'
