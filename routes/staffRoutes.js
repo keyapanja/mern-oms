@@ -242,7 +242,7 @@ router.post('/add-permissions/:staffID', (req, res) => {
                         if (final) {
                             res.json({
                                 'status': 'success',
-                                'msg': 'Permissions are added successfully!'
+                                'msg': 'Permissions updated successfully!'
                             })
                         }
                     })

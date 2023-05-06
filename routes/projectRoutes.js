@@ -321,4 +321,22 @@ router.get('/staff-recent-projects/:staffID', (req, res) => {
         .catch((err) => res.json(err))
 })
 
+router.post('/change-status/:id', (req, res) => {
+    Project.findOneAndUpdate({ projectID: req.params.id }, {
+        status: req.body.status
+    })
+        .then((data) => {
+            if (data) {
+                res.json({
+                    'status': 'success',
+                    'msg': 'Project status updated successfully!'
+                })
+            }
+        })
+        .catch((err) => res.json({
+            'status': 'error',
+            'msg': err.message
+        }))
+})
+
 module.exports = router;

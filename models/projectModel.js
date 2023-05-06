@@ -26,6 +26,10 @@ const projectModel = mongoose.Schema(
         client: {
             type: String
         },
+        status: {
+            type: String,
+            default: 'Yet to Start'
+        }
     },
     {
         timestamps: true
