@@ -339,4 +339,10 @@ router.post('/change-status/:id', (req, res) => {
         }))
 })
 
+router.get('/projects-by-status/:status', (req, res) => {
+    Project.find({ status: req.params.status })
+        .then((data) => res.json(data))
+        .catch((err) => res.json(err))
+})
+
 module.exports = router;
